@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,7 +57,7 @@ public class AppController {
 	// @RequestMapping(value = "/home", method = RequestMethod.GET)
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView getHome(HttpServletRequest request,
-			@ModelAttribute("userForm") User user) {
+			@ModelAttribute("userForm") User user,Model model) {
 		User userDb = UserDao.getUser(user.getUserName());
 		System.out.println("userDb" + userDb);
 		if (userDb == null)
@@ -82,7 +83,8 @@ public class AppController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		model.addAttribute("vmname", new String());
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
 
@@ -170,6 +172,62 @@ public class AppController {
 
 		// return new ModelAndView("listvm").addObject("vmList", vmStats);
 		return new ModelAndView("vm-statistics").addObject("vmList", vmStats);
+	}
+
+	@RequestMapping(value = "/powerOff", method = RequestMethod.POST)
+	public ModelAndView powerOff(HttpServletRequest request,
+			@ModelAttribute("vmname") String name) {
+		List<VMStat> vmStats = null;
+		System.out.println("Inside poweroff");
+		System.out.println(name);
+		VMOperations.powerOffVM(name);
+
+		String userName = (String) request.getSession()
+				.getAttribute("username");
+		List<String> vmList = UserDao.getUserVMs(userName);
+		try {
+			vmStats = VMOperations.getVMStatistics(vmList);
+		} catch (InvalidProperty e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RuntimeFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("ListVM").addObject("vmList", vmStats);
+
+	}
+
+	@RequestMapping(value = "/powerOn", method = RequestMethod.POST)
+	public ModelAndView powerOn(HttpServletRequest request,
+			@ModelAttribute("vmname") String name) {
+		List<VMStat> vmStats = null;
+		System.out.println("Inside powerOn");
+		System.out.println(name);
+	
+		VMOperations.powerOnVM(name);
+
+		String userName = (String) request.getSession()
+				.getAttribute("username");
+		List<String> vmList = UserDao.getUserVMs(userName);
+		try {
+			vmStats = VMOperations.getVMStatistics(vmList);
+		} catch (InvalidProperty e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RuntimeFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
 
 }

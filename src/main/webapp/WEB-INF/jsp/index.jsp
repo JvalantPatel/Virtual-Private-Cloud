@@ -91,7 +91,7 @@
                               <div class="modal-dialog">
                                 <div class="modal-content" style="margin-top: 12%;">
                                   <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <!-- <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
                                     <h2 class="modal-title" id="myModalLabel">Login</h2>
                                   </div>
                                   <div class="modal-body">
@@ -122,11 +122,11 @@
                               <div class="modal-dialog">
                                 <div class="modal-content" style="margin-top: 12%;">
                                   <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                  <!--   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
                                     <h2 class="modal-title" id="myModalLabel1">Sign Up</h2>
                                   </div>
                                   <div class="modal-body">
-                                   <form:form role="form" method = "post" action = "/signUp" commandName="userForm">
+                                   <form:form role="form" method = "post" action = "/VirtualPrivateCloud/signUp" commandName="userForm">
                                     <div class="form-group">
                                       <label for="email">Enter Email</label>
                                       <input type="text" class="inputclass" id="email" path="email" placeholder="Enter Email" style="margin-left: 8%;"/>
@@ -138,7 +138,7 @@
                                   <div class="modal-footer">
                                     <button type="submit" id = "btn1" class="btn btn-primary">Sign Up</button>
                                   </form:form> 
-                                    <form:form action="/cancel" method="GET">
+                                    <form:form action="/VirtualPrivateCloud/cancel" method="GET">
                                       <button type="submit" class="btn btn-primary">&nbsp;Cancel&nbsp;</button>
                                     </form:form>
                                  </div>
