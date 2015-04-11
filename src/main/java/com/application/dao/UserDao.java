@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.application.model.User;
+
 public class UserDao {
 	public static void addUser(String userName, String password) {
 		try {
@@ -29,6 +31,38 @@ public class UserDao {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public static User getUser(String userName) {
+		User user = null;
+		try {
+			Connection connection = DBConnection.getInstance().connection; 
+			if(userName != null) {
+				PreparedStatement statement = connection.
+						prepareStatement(
+								"SELECT "
+								+ "user_name, password "
+								+ "FROM t_user "
+								+ "WHERE "
+								+ "user_name = ?"
+								);
+				
+				statement.setString(1, userName);
+				statement.executeQuery();
+				
+				ResultSet rs = statement.executeQuery();
+				if(rs != null) {
+					rs.next();
+					user = new User();
+					user.setUserName(rs.getString("user_name"));
+					user.setPassword(rs.getString("password"));
+				}
+			} else
+				System.out.println("Username is null");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return user;
 	}
 	
 	public static void addUserVM(String userName, String vmName) {
