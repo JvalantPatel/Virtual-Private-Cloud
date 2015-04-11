@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.application.model.VMStat;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.VirtualMachineCloneSpec;
@@ -22,10 +23,10 @@ import com.vmware.vim25.mo.VirtualMachine;
 
 
 public class VMOperations {
-	final String winTemplateName = "VMTools-Win-VM";
-	final String linTemplateName = "VMTools-Lin-VM";
+	final static String winTemplateName = "VMTools-Win-VM";
+	final static String linTemplateName = "VMTools-Lin-VM";
 
-	public ServiceInstance getServiceInstance(){
+	public static ServiceInstance getServiceInstance(){
 		URL url;
 		ServiceInstance serviceInstance = null;
 		try {
@@ -40,7 +41,7 @@ public class VMOperations {
 		return serviceInstance;
 	}
 	
-	public List<VMStat> getVMStatistics(List<String> vmNames) throws InvalidProperty, RuntimeFault, RemoteException {
+	public static List<VMStat> getVMStatistics(List<String> vmNames) throws InvalidProperty, RuntimeFault, RemoteException {
 		List<VMStat> vmStatList = new ArrayList<VMStat>();
 		
 		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
@@ -91,7 +92,7 @@ public class VMOperations {
 		return vmStatList;
 	}
 
-	public boolean createVM(String vmName, long memoryLimit, int noOfCpu, String vmType) throws Exception {
+	public static boolean createVM(String vmName, long memoryLimit, int noOfCpu, String vmType) throws Exception {
 		String template;
 		template = vmType.equals("Windows") ? winTemplateName : linTemplateName; 
 		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
