@@ -21,18 +21,17 @@ import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.Task;
 import com.vmware.vim25.mo.VirtualMachine;
 
-
 public class VMOperations {
 	final static String winTemplateName = "VMTools-Win-VM";
 	final static String linTemplateName = "VMTools-Lin-VM";
 
-	public static ServiceInstance getServiceInstance(){
+	public static ServiceInstance getServiceInstance() {
 		URL url;
 		ServiceInstance serviceInstance = null;
 		try {
 			url = new URL("https://130.65.132.104/sdk");
-			serviceInstance = new ServiceInstance(url,
-					"administrator", "12!@qwQW", true);
+			serviceInstance = new ServiceInstance(url, "administrator",
+					"12!@qwQW", true);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
@@ -40,61 +39,73 @@ public class VMOperations {
 		}
 		return serviceInstance;
 	}
-	
-	public static List<VMStat> getVMStatistics(List<String> vmNames) throws InvalidProperty, RuntimeFault, RemoteException {
+
+	public static List<VMStat> getVMStatistics(List<String> vmNames)
+			throws InvalidProperty, RuntimeFault, RemoteException {
 		List<VMStat> vmStatList = new ArrayList<VMStat>();
-		
-		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
-				.getRootFolder());
-		
-		for (String vmName: vmNames) {
-			VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity("VirtualMachine", vmName);
-			if(vm == null)
-				continue;
-			
-			if (!vm.getRuntime().getPowerState().toString()
-					.equals("poweredOff")) {
-				
-				VMStat vmStat = new VMStat();
-				vmStat.setName(vm.getName());
-				//System.out.println(vm.getName());
-				
-				vmStat.setvMVersion(vm.getConfig().version);
-				//System.out.println("VM Version:"+vm.getConfig().version); 
-				
-				vmStat.setGuestOS(vm.getSummary().getConfig().guestFullName);
-				//System.out.println("Guest OS:"+vm.getSummary().getConfig().guestFullName);
-				
-				vmStat.setNumCpu(vm.getConfig().getHardware().numCPU);
-                //System.out.println("CPU:"+vm.getConfig().getHardware().numCPU+" vCPU");
-                
-                vmStat.setMemoryAllocated(vm.getConfig().getHardware().memoryMB);
-                //System.out.println("Memory:"+vm.getConfig().getHardware().memoryMB+" MB"); 
-                
-                vmStat.setiPAddress(vm.getSummary().getGuest().getIpAddress()); 
-                //System.out.println("IP Addresses:"+vm.getSummary().getGuest().getIpAddress());
-                
-                vmStat.setState(vm.getGuest().guestState);
-                //System.out.println("State:"+vm.getGuest().guestState);
-                
-                vmStat.setConsumedMemory(vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
-                //System.out.println("consumed memory " +vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
-                
-                vmStat.setCpuUsage(vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
-                //System.out.println("CPU Usage " +vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
-                
-                vmStat.setCpuAllocated(vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
-                //System.out.println("CPU Allocation " + vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
-                
-                vmStatList.add(vmStat);
-			}
+
+//		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
+//				.getRootFolder());
+
+		for (String vmName : vmNames) {
+			/*VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
+					"VirtualMachine", vmName);
+			if (vm == null)
+				continue;*/
+
+			/*
+			 * if (!vm.getRuntime().getPowerState().toString()
+			 * .equals("poweredOff")) {
+			 */
+
+			VMStat vmStat = new VMStat();
+			vmStat.setName("userVM-02");
+			// System.out.println(vm.getName());
+
+			/*vmStat.setvMVersion(vm.getConfig().version);
+			// System.out.println("VM Version:"+vm.getConfig().version);
+
+			vmStat.setGuestOS(vm.getSummary().getConfig().guestFullName);
+			// System.out.println("Guest OS:"+vm.getSummary().getConfig().guestFullName);
+
+			vmStat.setNumCpu(vm.getConfig().getHardware().numCPU);
+			// System.out.println("CPU:"+vm.getConfig().getHardware().numCPU+" vCPU");
+
+			vmStat.setMemoryAllocated(vm.getConfig().getHardware().memoryMB);
+			// System.out.println("Memory:"+vm.getConfig().getHardware().memoryMB+" MB");
+
+			vmStat.setiPAddress(vm.getSummary().getGuest().getIpAddress());*/
+			// System.out.println("IP Addresses:"+vm.getSummary().getGuest().getIpAddress());
+
+			vmStat.setState("notRunning");
+			// System.out.println("State:"+vm.getGuest().guestState);
+
+			/*vmStat.setConsumedMemory(vm.getResourcePool().getSummary()
+					.getQuickStats().guestMemoryUsage);
+			// System.out.println("consumed memory "
+			// +vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
+
+			vmStat.setCpuUsage(vm.getResourcePool().getSummary()
+					.getQuickStats().overallCpuUsage);
+			// System.out.println("CPU Usage "
+			// +vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
+
+			vmStat.setCpuAllocated(vm.getResourcePool().getConfig()
+					.getCpuAllocation().getLimit());*/
+			// System.out.println("CPU Allocation " +
+			// vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
+
+			vmStatList.add(vmStat);
+			// }
 		}
 		return vmStatList;
 	}
 
-	public static boolean createVM(String vmName, long memoryLimit, int noOfCpu, String vmType) throws Exception {
+	public static boolean createVM(String vmName, long memoryLimit,
+			int noOfCpu, String vmType) throws Exception {
 		String template;
-		template = vmType.equalsIgnoreCase("Windows") ? winTemplateName : linTemplateName; 
+		template = vmType.equalsIgnoreCase("Windows") ? winTemplateName
+				: linTemplateName;
 		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
 				.getRootFolder());
 		VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
@@ -104,32 +115,69 @@ public class VMOperations {
 		cloneSpec.setLocation(new VirtualMachineRelocateSpec());
 		cloneSpec.setPowerOn(false);
 		cloneSpec.setTemplate(true);
-		
-		Task task = vm.cloneVM_Task((Folder) vm.getParent(), vmName, cloneSpec); 
+
+		Task task = vm.cloneVM_Task((Folder) vm.getParent(), vmName, cloneSpec);
 		String status = task.waitForMe();
-		
+
 		if (status == Task.SUCCESS) {
 			System.out.println("VM got cloned successfully.");
-			
-			HostSystem host = (HostSystem) inv.searchManagedEntity("HostSystem", "130.65.132.161");
+
+			HostSystem host = (HostSystem) inv.searchManagedEntity(
+					"HostSystem", "130.65.132.161");
 			VirtualMachine newVM = (VirtualMachine) inv.searchManagedEntity(
 					"VirtualMachine", vmName);
-			
-			ManagedEntity[] mesAdmin = inv.searchManagedEntities("ComputeResource");
+
+			ManagedEntity[] mesAdmin = inv
+					.searchManagedEntities("ComputeResource");
 			ComputeResource computeResource = (ComputeResource) mesAdmin[0];
-			
+
 			newVM.markAsVirtualMachine(computeResource.getResourcePool(), host);
-			
+
 			VirtualMachineConfigSpec configSpec = new VirtualMachineConfigSpec();
 			configSpec.setMemoryMB(memoryLimit);
 			configSpec.setNumCPUs(noOfCpu);
 			newVM.reconfigVM_Task(configSpec);
-			
+
 			newVM.powerOnVM_Task(host);
 			return true;
 		} else {
 			System.out.println("Failure -: VM cannot be cloned");
 			return false;
+		}
+	}
+
+	public static boolean powerOnVM(String vmName) {
+		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
+				.getRootFolder());
+		try {
+			VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
+					"VirtualMachine", vmName);
+			vm.powerOnVM_Task(null);
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} 
+
+	}
+	
+	public static void powerOffVM(String vmName) {
+		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
+				.getRootFolder());
+		try {
+			VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
+					"VirtualMachine", vmName);
+			vm.powerOffVM_Task();
+		} catch (InvalidProperty e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RuntimeFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
