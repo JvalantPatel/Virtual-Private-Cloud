@@ -57,12 +57,9 @@
             <div class="pricing-area text-center">
                 <div class="row">
                     <c:forEach items="${vmList}" var="vm">
-                    
-                     <c:if test="${vm.state == 'running'}">
                     <div class="col-sm-4 plan price-one wow fadeInDown">
                         <ul>
                             <li class="heading-one">
-                           
                             <h1>${vm.name}</h1>
                             </li>
                             <li>Guest OS: ${vm.guestOS}</li>
@@ -73,10 +70,9 @@
                             <li>CPU Usage: ${vm.cpuUsage}</li>
                             <li>Memory Allocated: ${vm.memoryAllocated}</li>
                             <li>Consumed Memory: ${vm.consumedMemory}</li>
-                           
+                            
                         </ul>
                     </div>
-                     </c:if>
                     </c:forEach>
                 </div>
             </div><!--/pricing-area-->
