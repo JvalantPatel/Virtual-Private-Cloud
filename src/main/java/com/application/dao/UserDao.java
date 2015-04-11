@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-	public void addUser(String userName, String password) {
+	public static void addUser(String userName, String password) {
 		try {
 			Connection connection = DBConnection.getInstance().connection; 
 			if(userName != null && password != null) {
@@ -31,7 +31,7 @@ public class UserDao {
 		}
 	}
 	
-	public void addUserVM(String userName, String vmName) {
+	public static void addUserVM(String userName, String vmName) {
 		try {
 			Connection connection = DBConnection.getInstance().connection; 
 			if(userName != null && vmName != null) {
@@ -72,7 +72,7 @@ public class UserDao {
 		}
 	}
 	
-	public List<String> getUserVMs(String userName) {
+	public static List<String> getUserVMs(String userName) {
 		List<String> vmList = new ArrayList<String>();
 		try {
 			Connection connection = DBConnection.getInstance().connection; 
