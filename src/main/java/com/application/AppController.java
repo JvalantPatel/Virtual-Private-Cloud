@@ -34,6 +34,9 @@ public class AppController {
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public ModelAndView getHome(HttpServletRequest request,
 			@ModelAttribute("userForm") User user) {
+		User userDb = UserDao.getUser(user.getUserName());
+		if(userDb==null)
+			return new ModelAndView("login").addObject("message", "User Name or Password incorrect..");
 		System.out.println("Username is set to -" + user.getUserName());
 		request.getSession().setAttribute("username", user.getUserName());
 		List<VMStat> vmStats = null;
