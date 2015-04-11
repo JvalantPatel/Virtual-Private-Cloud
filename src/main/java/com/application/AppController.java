@@ -25,9 +25,14 @@ public class AppController {
 	/*
 	 * Services for.. 1)Login 2)Signup 3)CreateVm 4)ListOfVm 5)Stats
 	 */
-
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(HttpServletRequest request,
+	public String login() {
+		return "login";
+	}
+
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public ModelAndView getHome(HttpServletRequest request,
 			@ModelAttribute("userForm") User user) {
 		System.out.println("Username is set to -" + user.getUserName());
 		request.getSession().setAttribute("username", user.getUserName());
@@ -58,8 +63,15 @@ public class AppController {
 		return new ModelAndView("login").addObject("message",
 				"Registration Done!!");
 	}
+	
+	@RequestMapping(value = "/createvm", method = RequestMethod.GET)
+	public String createvm() {
+		return "createvm";
+	}
+	
+	
 
-	@RequestMapping(value = "/createvm", method = RequestMethod.POST)
+	@RequestMapping(value = "/createvmsubmit", method = RequestMethod.POST)
 	public ModelAndView createVirtualMachine(HttpServletRequest request,
 			@ModelAttribute("vm") VirtualMachine vm) {
 		String message = "";
