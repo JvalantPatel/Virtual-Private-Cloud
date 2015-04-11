@@ -57,34 +57,34 @@ public class VMOperations {
 				
 				VMStat vmStat = new VMStat();
 				vmStat.setName(vm.getName());
-				System.out.println(vm.getName());
+				//System.out.println(vm.getName());
 				
 				vmStat.setvMVersion(vm.getConfig().version);
-				System.out.println("VM Version:"+vm.getConfig().version); 
+				//System.out.println("VM Version:"+vm.getConfig().version); 
 				
 				vmStat.setGuestOS(vm.getSummary().getConfig().guestFullName);
-				System.out.println("Guest OS:"+vm.getSummary().getConfig().guestFullName);
+				//System.out.println("Guest OS:"+vm.getSummary().getConfig().guestFullName);
 				
 				vmStat.setNumCpu(vm.getConfig().getHardware().numCPU);
-                System.out.println("CPU:"+vm.getConfig().getHardware().numCPU+" vCPU");
+                //System.out.println("CPU:"+vm.getConfig().getHardware().numCPU+" vCPU");
                 
                 vmStat.setMemoryAllocated(vm.getConfig().getHardware().memoryMB);
-                System.out.println("Memory:"+vm.getConfig().getHardware().memoryMB+" MB"); 
+                //System.out.println("Memory:"+vm.getConfig().getHardware().memoryMB+" MB"); 
                 
                 vmStat.setiPAddress(vm.getSummary().getGuest().getIpAddress()); 
-                System.out.println("IP Addresses:"+vm.getSummary().getGuest().getIpAddress());
+                //System.out.println("IP Addresses:"+vm.getSummary().getGuest().getIpAddress());
                 
-                vmStat.setGuestOS(vm.getGuest().guestState);
-                System.out.println("State:"+vm.getGuest().guestState);
+                vmStat.setState(vm.getGuest().guestState);
+                //System.out.println("State:"+vm.getGuest().guestState);
                 
                 vmStat.setConsumedMemory(vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
-                System.out.println("consumed memory " +vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
+                //System.out.println("consumed memory " +vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
                 
                 vmStat.setCpuUsage(vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
-                System.out.println("CPU Usage " +vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
+                //System.out.println("CPU Usage " +vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
                 
                 vmStat.setCpuAllocated(vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
-                System.out.println("CPU Allocation " + vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
+                //System.out.println("CPU Allocation " + vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
                 
                 vmStatList.add(vmStat);
 			}
@@ -94,7 +94,7 @@ public class VMOperations {
 
 	public static boolean createVM(String vmName, long memoryLimit, int noOfCpu, String vmType) throws Exception {
 		String template;
-		template = vmType.equals("Windows") ? winTemplateName : linTemplateName; 
+		template = vmType.equalsIgnoreCase("Windows") ? winTemplateName : linTemplateName; 
 		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
 				.getRootFolder());
 		VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(

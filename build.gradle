@@ -12,6 +12,7 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'spring-boot'
 
+
 jar {
     baseName = 'VirtualPrivateCloud'
     version =  '1.0'
@@ -31,7 +32,9 @@ dependencies {
     providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper")
     compile("com.vmware:vijava:5.1")
     compile("mysql:mysql-connector-java:5.1.35") 
-    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.webjars:bootstrap:3.0.3")
+    compile("org.webjars:jquery:2.0.3-1")
+    compile("javax.servlet:jstl:1.2")
 }
 
 task wrapper(type: Wrapper) {

@@ -8,6 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
 import com.application.model.User;
 
 public class UserDao {
@@ -51,8 +55,9 @@ public class UserDao {
 				statement.executeQuery();
 				
 				ResultSet rs = statement.executeQuery();
-				if(rs != null) {
-					rs.next();
+				
+				if(rs.first()) {
+					//rs.next();
 					user = new User();
 					user.setUserName(rs.getString("user_name"));
 					user.setPassword(rs.getString("password"));
