@@ -29,7 +29,8 @@ configurations {
 dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web")
     providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper")
-    
+    compile("com.vmware:vijava:5.1")
+    compile("mysql:mysql-connector-java:5.1.35") 
 }
 
 task wrapper(type: Wrapper) {
