@@ -2,8 +2,10 @@ package com.application;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import com.application.dao.UserDao;
 import com.application.model.User;
@@ -38,14 +41,14 @@ public class AppController {
 
 	@RequestMapping(value = "/cancel", method = RequestMethod.GET)
 	public String cancel() {
-		return "index";
+		return "redirect:index";
 	}
 
 	@RequestMapping(value = "/back", method = RequestMethod.GET)
 	public String back() {
-		return "index";
+		return "redirect:index";
 	}
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(SessionStatus status) {
 		status.setComplete();
@@ -55,11 +58,19 @@ public class AppController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView getHome(HttpServletRequest request,
 			@ModelAttribute("userForm") User user, Model model) {
+		ModelAndView m = new ModelAndView();
 		User userDb = UserDao.getUser(user.getUserName());
 		System.out.println("userDb" + userDb);
-		if (userDb == null)
+		if (userDb == null) {
 
-			return new ModelAndView("redirect:index#myModal").addObject("message","Invalid username/password");
+			m.addObject("userForm", new User());
+			m.addObject("userForm1", new User());
+			m.setViewName("index");
+			;
+			m.addObject("message", "User Name or Password is invalid");
+			
+			return m;
+		}
 		System.out.println("Username is set to -" + userDb.getUserName());
 		request.getSession().setAttribute("username", userDb.getUserName());
 		List<VMStat> vmStats = null;
@@ -78,21 +89,22 @@ public class AppController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		model.addAttribute("loggedInUser", user.getUserName());
 		model.addAttribute("virtual", new VirtualMachine());
+		model.addAttribute("virtual1", new VirtualMachine());
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
 
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	// public ModelAndView signup(@ModelAttribute("userForm") User user) {
-	public String signup(@ModelAttribute("user") User user) {
+	public ModelAndView signup(@ModelAttribute("user") User user) {
+		ModelAndView model = new ModelAndView();
 		System.out.println("Registering User...");
 		UserDao.addUser(user.getUserName(), user.getPassword());
-		/*
-		 * return new ModelAndView("login").addObject("message",
-		 * "Registration Done!!");
-		 */
-		return "redirect:index";
+		model.addObject("userForm", new User());
+		model.addObject("userForm1", new User());
+		model.addObject("success", "Sign up Successful");
+		model.setViewName("index");
+		return model;
 	}
 
 	@RequestMapping(value = "/createvm", method = RequestMethod.GET)
@@ -103,7 +115,6 @@ public class AppController {
 
 	@RequestMapping(value = "/createvmsubmit", method = RequestMethod.POST)
 	public ModelAndView createVirtualMachine(HttpServletRequest request,
-	// @ModelAttribute("vm") VirtualMachine vm) {
 			@ModelAttribute("VM") VirtualMachine vm) {
 		System.out.println("Inside");
 		String message = "";
@@ -170,49 +181,41 @@ public class AppController {
 
 	@RequestMapping(value = "/powerOff", method = RequestMethod.POST)
 	public ModelAndView powerOff(HttpServletRequest request,
-			@ModelAttribute("vmname") String name) {
+			@ModelAttribute("virtual") VirtualMachine vm) {
 		List<VMStat> vmStats = null;
 		System.out.println("Inside poweroff");
-		System.out.println(name);
-		VMOperations.powerOffVM(name);
+		System.out.println("VM name is: "+vm.getVmName());
+		VMOperations.powerOffVM(vm.getVmName());
 
 		String userName = (String) request.getSession()
 				.getAttribute("username");
 		List<String> vmList = UserDao.getUserVMs(userName);
 		try {
 			vmStats = VMOperations.getVMStatistics(vmList);
-		} catch (InvalidProperty e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (RuntimeFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		} 
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 
 	}
 
 	@RequestMapping(value = "/powerOn", method = RequestMethod.POST)
 	public ModelAndView powerOn(HttpServletRequest request,
-			@ModelAttribute("vmname") VirtualMachine vm) {
+			@ModelAttribute("virtual1") VirtualMachine vm) {
 		List<VMStat> vmStats = null;
 		System.out.println("Inside powerOn");
-		System.out.println(vm.getVmName());
-		/*
-		 * VMOperations.powerOnVM(name);
-		 * 
-		 * String userName = (String) request.getSession()
-		 * .getAttribute("username"); List<String> vmList =
-		 * UserDao.getUserVMs(userName);
-		 */
+		System.out.println("VM name is: "+vm.getVmName());
+
+		VMOperations.powerOnVM(vm.getVmName());
+
+		String userName = (String) request.getSession()
+				.getAttribute("username");
+		List<String> vmList = UserDao.getUserVMs(userName);
 		try {
-			// vmStats = VMOperations.getVMStatistics(vmList);
+		//	vmStats = VMOperations.getVMStatistics(vmList);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 

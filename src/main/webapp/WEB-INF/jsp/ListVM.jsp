@@ -48,12 +48,13 @@
 							class="icon-bar"></span>
 					</button>
 					<img src="assets/images/c1.png"
-						style="width: 140px; height: 108px; margin-left: 44%;" />
+						style="width: 140px; height: 108px; margin-left: 60%;" />
 					<h2
-						style="color: white; font-size: 33px; font-family: calibri; margin-left: 92%; width: 100%; margin-top: -20%;">
+						style="color: white; font-size: 33px; font-family: calibri; margin-left: 110%; width: 100%; margin-top: -20%;">
 						Access your Private Cloud</h2>
 					<img src="assets/images/c1.png"
-						style="width: 140px; height: 108px; margin-left: 199%; margin-top: -23%;" />
+						style="width: 140px; height: 108px; margin-left: 219%; margin-top: -23%;" />
+
 				</div>
 			</div>
 			<!--/.container-->
@@ -66,11 +67,21 @@
 		<center>
 			<h2 style="margin-top: -1%; font-size: 37px;">Welcome Raina</h2>
 		</center>
+		<form action="/VirtualPrivateCloud/logout" method="GET">
+			<button type="submit" class="btn btn-primary" style="margin-left: 80%;margin-top: -7%;">
+				Logout</button>
+		</form>
+		<br><br>
+		<form id="homeId" name="homeForm" action="/VirtualPrivateCloud/back"
+			method="GET">
+			<button type="submit" id="btn1" class="btn btn-primary"
+				style="margin-left: 13%;margin-top: -17%;">Home</button>
+		</form>
 		<p>
 		<form name="createVM" id="createVMId"
 			action="/VirtualPrivateCloud/createvm" method="GET">
 			<button type="submit" class="btn btn-primary btn-lg btn-block"
-				style="margin-top: 4%;">CREATE VM</button>
+				style="margin-top: -4%;">CREATE VM</button>
 		</form>
 		</p>
 		<div class="container">
@@ -90,15 +101,15 @@
 							<td>${vm.state}</td>
 							<c:choose>
 								<c:when test="${vm.state == 'running'}">
-								<form method="POST" action="/VirtualPrivateCloud/powerOff" commandName="virtual">
+							<form:form method="POST" action="/VirtualPrivateCloud/powerOff" commandName="virtual">
       								  <td><button type="submit" class="btn btn-primary" value="Power OFF">Power OFF</button></td>
       								  <form:input type="hidden" path="vmName" value="${vm.name}"></form:input>
-      							</form>
+      							</form:form>
   								 </c:when>
 								<c:otherwise>
-								<form:form method="POST" action="/VirtualPrivateCloud/powerOn" commandName="virtual">
+								<form:form method="POST" action="/VirtualPrivateCloud/powerOn" commandName="virtual1">
         							<td><button type="submit" class="btn btn-primary" value="Power ON">Power On</button></td>
-        							<form:input type="text" path="vmName" value="${vm.name}"></form:input>
+        							<form:input type="hidden" path="vmName" value="${vm.name}"></form:input>
         						</form:form>
     							</c:otherwise>
 							</c:choose>
@@ -115,7 +126,7 @@
 				CLICK TO VIEW VM STATISTICS</button>
 		</form>
 		<br> <br>
-		<form action="/VirtualPrivateCloud/logout" method="GET">
+		<%-- <form action="/VirtualPrivateCloud/logout" method="GET">
 			<button type="submit" class="btn btn-primary btn-lg btn-block">
 				logout</button>
 		</form>
@@ -124,7 +135,7 @@
 			method="GET">
 			<button type="submit" id="btn1" class="btn btn-primary btn-lg"
 				style="margin-left: 45%;">Home</button>
-		</form>
+		</form> --%>
 		</p>
 	</section>
 

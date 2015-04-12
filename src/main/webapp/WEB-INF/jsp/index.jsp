@@ -47,12 +47,12 @@
 							class="icon-bar"></span>
 					</button>
 					<img src="assets/images/c1.png"
-						style="width: 140px; height: 108px; margin-left: 44%;" />
+						style="width: 140px; height: 108px; margin-left: 60%;" />
 					<h2
-						style="color: white; font-size: 33px; font-family: calibri; margin-left: 92%; width: 100%; margin-top: -20%;">
+						style="color: white; font-size: 33px; font-family: calibri; margin-left: 110%; width: 100%; margin-top: -20%;">
 						Access your Private Cloud</h2>
 					<img src="assets/images/c1.png"
-						style="width: 140px; height: 108px; margin-left: 199%; margin-top: -23%;" />
+						style="width: 140px; height: 108px; margin-left: 219%; margin-top: -23%;" />
 
 				</div>
 			</div>
@@ -78,27 +78,28 @@
 							<div class="col-sm-6">
 								<div class="carousel-content">
 									<h1 class="animation animated-item-1"
-										style="margin-top: -36%; color: Black;">Welcome</h1>
+										style="margin-left: 9%; margin-top: -36%; color: Black;">WELCOME</h1>
 									<!-- <h2 class="animation animated-item-2">Accusantium doloremque laudantium totam rem aperiam, eaque ipsa...</h2> -->
 									<div style="margin-left: -23%;">
 										<a id="activator" class="btn-slide animation animated-item-3"
-											style="width: 160px; height: 56px; margin-left: -16%; font-size: 25px"
+											style="width: 160px; height: 56px; margin-left: -4%; font-size: 25px"
 											href="#myModal">
-											<center style="margin-top: 5%; margin-left: -7%;">
+											<center style="margin-top: 7%; margin-left: -7%;">
 												LOGIN</center>
 										</a> <a id="activator1"
 											class="btn-slide animation animated-item-3"
 											style="width: 160px; height: 56px; font-size: 25px; margin-left: 19%;"
 											href="#myModal1">
-											<center style="margin-top: 5%; margin-left: -7%;">
+											<center style="margin-top: 7%; margin-left: 1%;">
 												SIGN UP</center>
 										</a>
-										
-<form:errors path="userName" cssClass="error" />
+
+
+
 									</div>
 								</div>
 							</div>
-
+							
 							<!-- Adding Modal Code 1-->
 
 							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -115,23 +116,26 @@
 												<div class="form-group">
 													<label>Enter UserName</label>
 													<form:input type="text" class="inputclass" path="userName"
-														placeholder="Enter UserName" style="margin-left: 8%;" />
-														
-														
-														
+														placeholder="Enter UserName" style="margin-left: 1.5%;" />
+													<form:errors path="userName" cssClass="error" />
+
+
+
 												</div>
 												<div class="form-group">
 													<label for="password">Enter Password</label>&nbsp;&nbsp;&nbsp;&nbsp;
-													<form:input path="password" type="password" class="inputclass"
-														id="pwd" placeholder="Enter Password" />
+													<form:input path="password" type="password"
+														class="inputclass" id="pwd" placeholder="Enter Password" />
 												</div>
 												<div class="modal-footer">
-													<button type="submit" id="btn1" class="btn btn-primary">Login</button>
+													<button type="submit" id="btn1" class="btn btn-primary"
+														style="margin-top: -4%;">Login</button>
 												</div>
 											</form:form>
 
 											<form:form action="/VirtualPrivateCloud/cancel" method="GET">
-												<button type="submit" class="btn btn-primary">&nbsp;Cancel&nbsp;</button>
+												<button type="submit" class="btn btn-primary"
+													style="margin-top: -17%; margin-left: 8%;">Cancel</button>
 
 											</form:form>
 										</div>
@@ -152,14 +156,15 @@
 										<form:form role="form" method="post"
 											action="/VirtualPrivateCloud/signUp" commandName="userForm1">
 											<div class="form-group">
-												<label>Enter UserName</label> <form:input type="text"
-													class="inputclass" id="uname" path="userName"
-													placeholder="Enter UserName" style="margin-left: 8%;" />
+												<label>Enter UserName</label>
+												<form:input type="text" class="inputclass" id="uname"
+													path="userName" placeholder="Enter UserName"
+													style="margin-left: 1.5%;" />
 											</div>
 											<div class="form-group">
 												<label>Enter Password</label>&nbsp;&nbsp;&nbsp;&nbsp;
-												<form:input path="password" type="password" class="inputclass"
-													id="pwd1" placeholder="Enter Password" />
+												<form:input path="password" type="password"
+													class="inputclass" id="pwd1" placeholder="Enter Password" />
 											</div>
 											<div class="modal-footer">
 												<button type="submit" id="btn1" class="btn btn-primary">Sign
@@ -167,7 +172,7 @@
 											</div>
 										</form:form>
 										<form:form action="/VirtualPrivateCloud/cancel" method="GET">
-											<button type="submit" class="btn btn-primary">&nbsp;Cancel&nbsp;</button>
+											<button type="submit" class="btn btn-primary" style="margin-top:-17%">Cancel</button>
 										</form:form>
 									</div>
 								</div>
@@ -176,7 +181,17 @@
 					</div>
 
 					<!--Adding Modal Code-->
-
+					<br><br><br>
+					<div style="margin-left:39%;color:#c52d2f;font-size: 16px;">
+					<c:if test="${not empty message}">
+   								<b>${message}</b>
+					</c:if>
+					</div>
+					<div style="margin-left:7%;color:#c52d2f;font-size: 16px;">
+					<c:if test="${not empty success}">
+   								<b>${success}</b>
+					</c:if>
+					</div>
 
 
 				</div>

@@ -44,14 +44,14 @@ public class VMOperations {
 			throws InvalidProperty, RuntimeFault, RemoteException {
 		List<VMStat> vmStatList = new ArrayList<VMStat>();
 
-//		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
-//				.getRootFolder());
+		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
+				.getRootFolder());
 
 		for (String vmName : vmNames) {
-			/*VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
+			VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
 					"VirtualMachine", vmName);
 			if (vm == null)
-				continue;*/
+				continue;
 
 			/*
 			 * if (!vm.getRuntime().getPowerState().toString()
@@ -59,10 +59,10 @@ public class VMOperations {
 			 */
 
 			VMStat vmStat = new VMStat();
-			vmStat.setName("userVM-02");
+			vmStat.setName(vm.getName());
 			// System.out.println(vm.getName());
 
-			/*vmStat.setvMVersion(vm.getConfig().version);
+			vmStat.setvMVersion(vm.getConfig().version);
 			// System.out.println("VM Version:"+vm.getConfig().version);
 
 			vmStat.setGuestOS(vm.getSummary().getConfig().guestFullName);
@@ -74,13 +74,13 @@ public class VMOperations {
 			vmStat.setMemoryAllocated(vm.getConfig().getHardware().memoryMB);
 			// System.out.println("Memory:"+vm.getConfig().getHardware().memoryMB+" MB");
 
-			vmStat.setiPAddress(vm.getSummary().getGuest().getIpAddress());*/
+			vmStat.setiPAddress(vm.getSummary().getGuest().getIpAddress());
 			// System.out.println("IP Addresses:"+vm.getSummary().getGuest().getIpAddress());
 
-			vmStat.setState("notRunning");
+			vmStat.setState(vm.getGuest().guestState);
 			// System.out.println("State:"+vm.getGuest().guestState);
 
-			/*vmStat.setConsumedMemory(vm.getResourcePool().getSummary()
+			vmStat.setConsumedMemory(vm.getResourcePool().getSummary()
 					.getQuickStats().guestMemoryUsage);
 			// System.out.println("consumed memory "
 			// +vm.getResourcePool().getSummary().getQuickStats().guestMemoryUsage);
@@ -91,9 +91,9 @@ public class VMOperations {
 			// +vm.getResourcePool().getSummary().getQuickStats().overallCpuUsage);
 
 			vmStat.setCpuAllocated(vm.getResourcePool().getConfig()
-					.getCpuAllocation().getLimit());*/
+					.getCpuAllocation().getLimit());
 			// System.out.println("CPU Allocation " +
-			// vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
+			//vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
 
 			vmStatList.add(vmStat);
 			// }
