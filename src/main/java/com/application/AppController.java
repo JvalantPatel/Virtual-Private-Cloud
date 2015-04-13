@@ -68,7 +68,7 @@ public class AppController {
 			m.setViewName("index");
 			;
 			m.addObject("message", "User Name or Password is invalid");
-			
+
 			return m;
 		}
 		System.out.println("Username is set to -" + userDb.getUserName());
@@ -80,14 +80,13 @@ public class AppController {
 		try {
 			vmStats = VMOperations.getVMStatistics(vmList);
 		} catch (InvalidProperty e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("App Cntroller: Invalid Property Exception");
 		} catch (RuntimeFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			System.out.println("App Cntroller: RuntimeFault");
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("App Cntroller: RemoteException");
+
 		}
 		model.addAttribute("loggedInUser", user.getUserName());
 		model.addAttribute("virtual", new VirtualMachine());
@@ -133,25 +132,22 @@ public class AppController {
 		}
 		if (done) {
 			UserDao.addUserVM(userName, vm.getVmName());
-			/* message = "Virtual Machine is created successfully!!"; */
+
 		} else {
-			/* message = "Virtual Machine creation failed !!"; */
+
 		}
 		List<String> vmList = UserDao.getUserVMs(userName);
 		try {
 			vmStats = VMOperations.getVMStatistics(vmList);
 		} catch (InvalidProperty e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			System.out.println("AppController: Invalid Property");
 		} catch (RuntimeFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("AppController: Runtime Exception");
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("AppController: Remote Exception");
 		}
 
-		// return new ModelAndView("listvm").addObject("vmList", vmStats);
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
 
@@ -165,17 +161,16 @@ public class AppController {
 		try {
 			vmStats = VMOperations.getVMStatistics(vmList);
 		} catch (InvalidProperty e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("AppController: Invalid Property");
+
 		} catch (RuntimeFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("AppController: Runtime Exception");
+
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			System.out.println("AppController: Remote Exception");
 		}
 
-		// return new ModelAndView("listvm").addObject("vmList", vmStats);
 		return new ModelAndView("vm-statistics").addObject("vmList", vmStats);
 	}
 
@@ -184,18 +179,23 @@ public class AppController {
 			@ModelAttribute("virtual") VirtualMachine vm) {
 		List<VMStat> vmStats = null;
 		System.out.println("Inside poweroff");
-		System.out.println("VM name is: "+vm.getVmName());
+		System.out.println("VM name is: " + vm.getVmName());
 		VMOperations.powerOffVM(vm.getVmName());
 
 		String userName = (String) request.getSession()
 				.getAttribute("username");
 		List<String> vmList = UserDao.getUserVMs(userName);
+
 		try {
 			vmStats = VMOperations.getVMStatistics(vmList);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		} catch (InvalidProperty e) {
+			System.out.println("Appcontroller: Invalid Property");
+		} catch (RuntimeFault e) {
+			System.out.println("Appcontroller: Runtime Fault");
+		} catch (RemoteException e) {
+			System.out.println("Appcontroller:Remote Exception");
+		}
+
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 
 	}
@@ -205,7 +205,7 @@ public class AppController {
 			@ModelAttribute("virtual1") VirtualMachine vm) {
 		List<VMStat> vmStats = null;
 		System.out.println("Inside powerOn");
-		System.out.println("VM name is: "+vm.getVmName());
+		System.out.println("VM name is: " + vm.getVmName());
 
 		VMOperations.powerOnVM(vm.getVmName());
 
@@ -213,10 +213,13 @@ public class AppController {
 				.getAttribute("username");
 		List<String> vmList = UserDao.getUserVMs(userName);
 		try {
-		//	vmStats = VMOperations.getVMStatistics(vmList);
-		} catch (Exception e) {
-
-			e.printStackTrace();
+			vmStats = VMOperations.getVMStatistics(vmList);
+		} catch (InvalidProperty e) {
+			System.out.println("Appcontroller: Invalid Property");
+		} catch (RuntimeFault e) {
+			System.out.println("Appcontroller: Runtime Fault");
+		} catch (RemoteException e) {
+			System.out.println("Appcontroller:Remote Exception");
 		}
 
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);

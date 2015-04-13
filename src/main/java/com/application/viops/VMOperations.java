@@ -93,7 +93,7 @@ public class VMOperations {
 			vmStat.setCpuAllocated(vm.getResourcePool().getConfig()
 					.getCpuAllocation().getLimit());
 			// System.out.println("CPU Allocation " +
-			//vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
+			// vm.getResourcePool().getConfig().getCpuAllocation().getLimit());
 
 			vmStatList.add(vmStat);
 			// }
@@ -117,7 +117,7 @@ public class VMOperations {
 		cloneSpec.setTemplate(true);
 
 		Task task = vm.cloneVM_Task((Folder) vm.getParent(), vmName, cloneSpec);
-		String status = task.waitForMe();
+		String status = task.waitForTask();
 
 		if (status == Task.SUCCESS) {
 			System.out.println("VM got cloned successfully.");
@@ -154,30 +154,36 @@ public class VMOperations {
 					"VirtualMachine", vmName);
 			vm.powerOnVM_Task(null);
 			return true;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (InvalidProperty e) {
+			System.out.println("VMOperations: InvalidProperty");
 			return false;
-		} 
+		} catch (RuntimeFault e) {
+			System.out.println("VMOperations: Runtime Fault");
+			return false;
+		} catch (RemoteException e) {
+			System.out.println("VMOperations: Remote Exception");
+			return false;
+		}
 
 	}
-	
-	public static void powerOffVM(String vmName) {
+
+	public static boolean powerOffVM(String vmName) {
 		InventoryNavigator inv = new InventoryNavigator(getServiceInstance()
 				.getRootFolder());
 		try {
 			VirtualMachine vm = (VirtualMachine) inv.searchManagedEntity(
 					"VirtualMachine", vmName);
 			vm.powerOffVM_Task();
+			return true;
 		} catch (InvalidProperty e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("VMOperations: InvalidProperty");
+			return false;
 		} catch (RuntimeFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("VMOperations: Runtime Fault");
+			return false;
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("VMOperations: Remote Exception");
+			return false;
 		}
 	}
 }

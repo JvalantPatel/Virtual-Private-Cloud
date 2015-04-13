@@ -77,13 +77,13 @@
 				</form>
 				<section>
 					<center>
-						<h3>
-							Note: Connect to VMs via SSH - Eg: "ssh team04@
-							<ipAddressOfVM>"
+						<h3 style="margin-top: -6%;">
+							Note: Connect to VMs via SSH - Eg: "ssh team04@ipAddressOfVM"
 						</h3>
 					</center>
 				</section>
 			</div>
+			<br><br><br><br>
 			<div class="pricing-area text-center">
 				<div class="row">
 					<c:forEach items="${vmList}" var="vm">
