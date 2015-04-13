@@ -65,7 +65,7 @@
 
 	<section id="vmList">
 		<center>
-			<h2 style="margin-top: -1%; font-size: 37px;">Welcome Raina</h2>
+			<h2 style="margin-top: -1%; font-size: 37px;">Welcome ${loggedInUser}</h2>
 		</center>
 		<form action="/VirtualPrivateCloud/logout" method="GET">
 			<button type="submit" class="btn btn-primary" style="margin-left: 80%;margin-top: -7%;">
