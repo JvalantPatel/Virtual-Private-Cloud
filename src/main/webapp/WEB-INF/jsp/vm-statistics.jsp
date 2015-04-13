@@ -59,25 +59,35 @@
 	</header>
 	<!--/header-->
 
+
 	<section class="pricing-page">
 		<div class="container">
 			<div class="center">
 				<h2>VM STATISTICS</h2>
 				<form action="/VirtualPrivateCloud/logout" method="GET">
-			<button type="submit" class="btn btn-primary" style="margin-left: 75%;margin-top: -9%;">
-				Logout</button>
-		</form>
-		<br><br>
-		<form id="homeId" name="homeForm" action="/VirtualPrivateCloud/back"
-			method="GET">
-			<button type="submit" id="btn1" class="btn btn-primary"
-				style="margin-left: -66%;margin-top: -20%;">Home</button>
-		</form>
+					<button type="submit" class="btn btn-primary"
+						style="margin-left: 75%; margin-top: -9%;">Logout</button>
+				</form>
+				<br>
+				<br>
+				<form id="homeId" name="homeForm" action="/VirtualPrivateCloud/back"
+					method="GET">
+					<button type="submit" id="btn1" class="btn btn-primary"
+						style="margin-left: -66%; margin-top: -20%;">Home</button>
+				</form>
+				<section>
+					<center>
+						<h3>
+							Note: Connect to VMs via SSH - Eg: "ssh team04@
+							<ipAddressOfVM>"
+						</h3>
+					</center>
+				</section>
 			</div>
 			<div class="pricing-area text-center">
 				<div class="row">
 					<c:forEach items="${vmList}" var="vm">
-							
+
 						<c:if test="${vm.state == 'running'}">
 							<div class="col-sm-4 plan price-one wow fadeInDown">
 								<ul>
@@ -103,7 +113,7 @@
 			<!--/pricing-area-->
 		</div>
 		<!--/container-->
-<%-- 
+		<%-- 
 		<center>
 			<form id="homeId" name="homeForm" action="/VirtualPrivateCloud/back"
 				method="GET">
