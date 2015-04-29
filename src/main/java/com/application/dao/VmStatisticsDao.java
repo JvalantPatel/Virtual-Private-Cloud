@@ -248,4 +248,41 @@ public class VmStatisticsDao {
 		}
 		return result;
 	}
+	
+	public static Map<String, Long> getVmPropertyThresholdExceedStatus(String vmName) {
+		Map<String, Long> result = new HashMap<String, Long>();
+		try {
+			Connection connection = DBConnection.getInstance().connection; 
+				PreparedStatement statement = null;
+				
+				statement = connection.
+						prepareStatement(
+								"SELECT "
+								+ "property.name"
+								+ ", threshold.limit_exceed "
+								+ "FROM "
+								+ "t_vm_property_threshold threshold"
+								+ ", t_properties property"
+								+ ", t_user_vm vm "
+								+ "WHERE "
+								+ "vm.id = threshold.vm_id "
+								+ "AND property.id = threshold.property_id "
+								+ "AND vm_name = ?"
+								);
+				statement.setString(1, vmName);
+				ResultSet rs = statement.executeQuery();
+				if(rs == null) {
+					System.out.println("VmStatisticsDao : getVmPropertyThresholdExceedStatus : No result");
+					return result;
+				}
+				while(rs.next()){
+					result.put(rs.getString("name"), rs.getLong("limit_exceed"));
+					//System.out.println(rs.getString("name") + "---"+ rs.getLong("limit_exceed"));
+				}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
