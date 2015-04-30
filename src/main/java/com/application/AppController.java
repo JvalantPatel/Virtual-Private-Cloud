@@ -5,22 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import com.application.dao.UserDao;
+import com.application.dao.VmStatisticsDao;
 import com.application.model.User;
+import com.application.model.VMAlarm;
+import com.application.model.VMAlarmStatus;
 import com.application.model.VMStat;
 import com.application.model.VirtualMachine;
+import com.application.utility.AppUtility;
 import com.application.viops.VMOperations;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
@@ -224,5 +226,43 @@ public class AppController {
 
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
+	
+	/*Service for getting Alarm page*/
+	@RequestMapping(value = "/getAlarmPage", method = RequestMethod.GET)
+	public ModelAndView getAlarmPage(HttpServletRequest request,Model model) {
+		String userName = (String) request.getSession()
+				.getAttribute("username");
+		List<String> vmList = UserDao.getUserVMs(userName);
+		return new ModelAndView("alarmPage").addObject("vmList", vmList);
+		
+	}
+	
+	/*AJAX Call - Service for getting Alarm Threshold value for VM*/
+	@RequestMapping(value = "/getVMAlarmThreshold", method = RequestMethod.GET)
+	public @ResponseBody VMAlarm getVMAlarmThreshold(@ModelAttribute("vmName") String vmName) {
+		Map<String, Long> map =  VmStatisticsDao.getVMPropertyThresholdValues(vmName);
+		return  AppUtility.convertMapToVMAlarm(map);		
+	}
+	
+	/*AJAX Call - Service for setting Alarm Threshold value for VM*/
+	@RequestMapping(value = "/setVMAlarmThreshold", method = RequestMethod.POST)
+	public @ResponseBody boolean setVMAlarmThreshold(@ModelAttribute("vmAlarm") VMAlarm vmAlarm) {
+		return  AppUtility.setAlarmThresholdValuesForVM(vmAlarm);		
+	}
 
+	/* Service for getting VM Statistics page -- Kibana and VM's Alarm status */
+	@RequestMapping(value = "/getVmStatisticsPage", method = RequestMethod.GET)
+	public ModelAndView getVmStatisticsPage(@ModelAttribute("vmName") String vmName) {
+		Map<String, Long> map =  VmStatisticsDao.getVmPropertyThresholdExceedStatus(vmName);
+		VMAlarmStatus vmAlarmStatus= AppUtility.convertMapToVMAlarmStatus(map);
+		return new ModelAndView("getVmStatisticsPage").addObject("vmName", vmName).addObject("vmAlarmStatus", vmAlarmStatus);
+		
+	}
+	
+	/* AJAX Call - Service for getting VM's Alarm status*/
+	@RequestMapping(value = "/getVmAlarmStatus", method = RequestMethod.GET)
+	public @ResponseBody VMAlarmStatus getVmAlarmStatus(@ModelAttribute("vmName") String vmName) {
+		Map<String, Long> map =  VmStatisticsDao.getVmPropertyThresholdExceedStatus(vmName);
+		return AppUtility.convertMapToVMAlarmStatus(map);		
+	}
 }
