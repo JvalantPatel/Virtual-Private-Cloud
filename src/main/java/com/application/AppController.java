@@ -68,7 +68,6 @@ public class AppController {
 			m.addObject("userForm", new User());
 			m.addObject("userForm1", new User());
 			m.setViewName("index");
-			;
 			m.addObject("message", "User Name or Password is invalid");
 
 			return m;
