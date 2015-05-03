@@ -1,6 +1,7 @@
 package com.application;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -74,7 +76,8 @@ public class AppController {
 		}
 		System.out.println("Username is set to -" + userDb.getUserName());
 		request.getSession().setAttribute("username", userDb.getUserName());
-		List<VMStat> vmStats = null;
+		// List<VMStat> vmStats = null;
+		List<VMStat> vmStats = new ArrayList<VMStat>();
 		String userName = (String) request.getSession()
 				.getAttribute("username");
 		List<String> vmList = UserDao.getUserVMs(userName);
@@ -89,9 +92,11 @@ public class AppController {
 			System.out.println("App Cntroller: RemoteException");
 
 		}
+
 		model.addAttribute("loggedInUser", user.getUserName());
 		model.addAttribute("virtual", new VirtualMachine());
 		model.addAttribute("virtual1", new VirtualMachine());
+		model.addAttribute("vmAlarm", new VMAlarm());
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
 
@@ -153,7 +158,7 @@ public class AppController {
 	}
 
 	@RequestMapping(value = "/showstats", method = RequestMethod.GET)
-	public ModelAndView showVMStats(HttpServletRequest request) {
+	public ModelAndView showVMStats(HttpServletRequest request, Model model) {
 		String message = "";
 		String userName = (String) request.getSession()
 				.getAttribute("username");
@@ -171,7 +176,7 @@ public class AppController {
 
 			System.out.println("AppController: Remote Exception");
 		}
-
+		model.addAttribute("vmAlarm", new VMAlarm());
 		return new ModelAndView("vm-statistics").addObject("vmList", vmStats);
 	}
 
@@ -225,43 +230,92 @@ public class AppController {
 
 		return new ModelAndView("ListVM").addObject("vmList", vmStats);
 	}
-	
-	/*Service for getting Alarm page*/
-	@RequestMapping(value = "/getAlarmPage", method = RequestMethod.GET)
-	public ModelAndView getAlarmPage(HttpServletRequest request,Model model) {
+
+	/* Service for getting Alarm page */
+	@RequestMapping(value = "/vmThresholdPage", method = RequestMethod.GET)
+	public ModelAndView getAlarmPage(HttpServletRequest request, Model model) {
+		/*
+		 * String userName = (String) request.getSession()
+		 * .getAttribute("username"); List<String> vmList =
+		 * UserDao.getUserVMs(userName); return new
+		 * ModelAndView("alarmPage").addObject("vmList", vmList);
+		 */
 		String userName = (String) request.getSession()
 				.getAttribute("username");
 		List<String> vmList = UserDao.getUserVMs(userName);
-		return new ModelAndView("alarmPage").addObject("vmList", vmList);
-		
+		ModelAndView modelAndView = new ModelAndView();
+		// modelAndView.addObject("vmmAlarm", new VMAlarm());
+		model.addAttribute("vmAlarm", new VMAlarm());
+		modelAndView.setViewName("vmThreshholdPage");
+		modelAndView.addObject("vmList", vmList);
+		return modelAndView;
 	}
-	
-	/*AJAX Call - Service for getting Alarm Threshold value for VM*/
-	@RequestMapping(value = "/getVMAlarmThreshold", method = RequestMethod.GET)
-	public @ResponseBody VMAlarm getVMAlarmThreshold(@ModelAttribute("vmName") String vmName) {
-		Map<String, Long> map =  VmStatisticsDao.getVMPropertyThresholdValues(vmName);
-		return  AppUtility.convertMapToVMAlarm(map);		
+
+	/* AJAX Call - Service for getting Alarm Threshold value for VM */
+	// @RequestMapping(value = "/getVMAlarmThreshold", method =
+	// RequestMethod.GET)
+	@RequestMapping(value = "/getVMAlarmThreshold/{vmName}", method = RequestMethod.GET)
+	public @ResponseBody
+	VMAlarm getVMAlarmThreshold(@PathVariable String vmName) {
+		Map<String, Long> map = VmStatisticsDao
+				.getVMPropertyThresholdValues(vmName);
+		return AppUtility.convertMapToVMAlarm(map);
 	}
-	
-	/*AJAX Call - Service for setting Alarm Threshold value for VM*/
+
+	/* AJAX Call - Service for setting Alarm Threshold value for VM */
 	@RequestMapping(value = "/setVMAlarmThreshold", method = RequestMethod.POST)
-	public @ResponseBody boolean setVMAlarmThreshold(@ModelAttribute("vmAlarm") VMAlarm vmAlarm) {
-		return  AppUtility.setAlarmThresholdValuesForVM(vmAlarm);		
+	public @ResponseBody
+	ModelAndView setVMAlarmThreshold(@ModelAttribute("vmAlarm") VMAlarm vmAlarm) {
+		System.out.println("controller: set threshold");
+		System.out.println(vmAlarm.getVMName() + " "
+				+ vmAlarm.getCpuThreshold() + " " + vmAlarm.getNetThreshold()
+				+ " " + vmAlarm.getMemoryThreshold() + " "
+				+ vmAlarm.getDiskReadThreshold() + " "
+				+ vmAlarm.getDiskWriteThreshold());
+		ModelAndView modelView = new ModelAndView();
+		modelView.setViewName("vmThreshholdPage");
+		modelView.addObject("response",
+				AppUtility.setAlarmThresholdValuesForVM(vmAlarm));
+		// return AppUtility.setAlarmThresholdValuesForVM(vmAlarm);
+		return modelView;
 	}
 
 	/* Service for getting VM Statistics page -- Kibana and VM's Alarm status */
-	@RequestMapping(value = "/getVmStatisticsPage", method = RequestMethod.GET)
-	public ModelAndView getVmStatisticsPage(@ModelAttribute("vmName") String vmName) {
-		Map<String, Long> map =  VmStatisticsDao.getVmPropertyThresholdExceedStatus(vmName);
-		VMAlarmStatus vmAlarmStatus= AppUtility.convertMapToVMAlarmStatus(map);
-		return new ModelAndView("getVmStatisticsPage").addObject("vmName", vmName).addObject("vmAlarmStatus", vmAlarmStatus);
-		
+
+	/*
+	 * @RequestMapping(value = "/getVmStatisticsPage", method =
+	 * RequestMethod.GET) public ModelAndView getVmStatisticsPage(
+	 * 
+	 * @ModelAttribute("vmName") String vmName) { Map<String, Long> map =
+	 * VmStatisticsDao .getVmPropertyThresholdExceedStatus(vmName);
+	 * VMAlarmStatus vmAlarmStatus = AppUtility.convertMapToVMAlarmStatus(map);
+	 * return new ModelAndView("getVmStatisticsPage").addObject("vmName",
+	 * vmName).addObject("vmAlarmStatus", vmAlarmStatus);
+	 * 
+	 * }
+	 */
+
+	// working with post
+	@RequestMapping(value = "/getVmStatisticsPage", method = RequestMethod.POST)
+	public ModelAndView getVmStatisticsPage(
+			@ModelAttribute("vmAlarm") VMAlarm vmAlarm) {
+		String vmName = vmAlarm.getVMName();
+		System.out.println("VM Name: " + vmAlarm.getVMName());
+		Map<String, Long> map = VmStatisticsDao
+				.getVmPropertyThresholdExceedStatus(vmName);
+		VMAlarmStatus vmAlarmStatus = AppUtility.convertMapToVMAlarmStatus(map);
+		return new ModelAndView("vmPerfGraphs").addObject("vmName", vmName)
+				.addObject("vmAlarmStatus", vmAlarmStatus);
+
 	}
-	
-	/* AJAX Call - Service for getting VM's Alarm status*/
-	@RequestMapping(value = "/getVmAlarmStatus", method = RequestMethod.GET)
-	public @ResponseBody VMAlarmStatus getVmAlarmStatus(@ModelAttribute("vmName") String vmName) {
-		Map<String, Long> map =  VmStatisticsDao.getVmPropertyThresholdExceedStatus(vmName);
-		return AppUtility.convertMapToVMAlarmStatus(map);		
+
+	/* AJAX Call - Service for getting VM's Alarm status */
+	@RequestMapping(value = "/getVmAlarmStatus/{vmName}", method = RequestMethod.GET)
+	/* VMAlarmStatus getVmAlarmStatus(@ModelAttribute("vmName") String vmName) { */
+	public @ResponseBody
+	VMAlarmStatus getVmAlarmStatus(@PathVariable String vmName) {
+		Map<String, Long> map = VmStatisticsDao
+				.getVmPropertyThresholdExceedStatus(vmName);
+		return AppUtility.convertMapToVMAlarmStatus(map);
 	}
 }

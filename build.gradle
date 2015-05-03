@@ -37,7 +37,7 @@ dependencies {
     compile("org.webjars:jquery:2.0.3-1")
     compile("javax.servlet:jstl:1.2")
     compile('javax.mail:mail:1.4.1')
-    compile('javax:javaee-api:6.0')
+    
 }
 
 task wrapper(type: Wrapper) {

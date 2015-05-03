@@ -68,8 +68,7 @@
 					<button type="submit" class="btn btn-primary"
 						style="margin-left: 75%; margin-top: -9%;">Logout</button>
 				</form>
-				<br>
-				<br>
+				<br> <br>
 				<form id="homeId" name="homeForm" action="/VirtualPrivateCloud/back"
 					method="GET">
 					<button type="submit" id="btn1" class="btn btn-primary"
@@ -77,36 +76,38 @@
 				</form>
 				<section>
 					<center>
-						<h3 style="margin-top: -6%;">
-							Note: Connect to VMs via SSH - Eg: "ssh team04@ipAddressOfVM"
-						</h3>
+						<h3 style="margin-top: -6%;">Note: Connect to VMs via SSH -
+							Eg: "ssh team04@ipAddressOfVM"</h3>
 					</center>
 				</section>
 			</div>
-			<br><br><br><br>
+			<br>
+			<br>
+			<br>
+			<br>
 			<div class="pricing-area text-center">
 				<div class="row">
 					<c:forEach items="${vmList}" var="vm">
-
 						<c:if test="${vm.state == 'running'}">
 							<div class="col-sm-4 plan price-one wow fadeInDown">
-								<ul>
-									<li class="heading-one" style="margin-top: -28%;">
+								
+									<ul>
+										<li class="heading-one" style="margin-top: -28%;">
 
-										<h1>${vm.name}</h1>
-									</li>
-									<li>Guest OS: ${vm.guestOS}</li>
-									<li>IP Address: ${vm.iPAddress}</li>
-									<li>State: ${vm.state}</li>
-									<li>Number of CPUs: ${vm.numCpu}</li>
-									<li>CPU Allocated: ${vm.cpuAllocated}</li>
-									<li>CPU Usage: ${vm.cpuUsage}</li>
-									<li>Memory Allocated: ${vm.memoryAllocated}</li>
-									<li>Consumed Memory: ${vm.consumedMemory}</li>
-
-								</ul>
+											<h1>${vm.name}</h1>
+										<li>Guest OS: ${vm.guestOS}</li>
+										<li>IP Address: ${vm.iPAddress}</li>
+										<li>State: ${vm.state}</li>
+										<li>Number of CPUs: ${vm.numCpu}</li>
+										<li>CPU Allocated: ${vm.cpuAllocated}</li>
+										<li>CPU Usage: ${vm.cpuUsage}</li>
+										<li>Memory Allocated: ${vm.memoryAllocated}</li>
+										<li>Consumed Memory: ${vm.consumedMemory}</li>
+									</ul>
+									
 							</div>
 						</c:if>
+						
 					</c:forEach>
 				</div>
 			</div>

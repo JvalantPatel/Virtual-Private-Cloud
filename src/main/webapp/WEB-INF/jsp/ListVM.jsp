@@ -125,6 +125,11 @@
 			<button type="submit" class="btn btn-primary btn-lg btn-block">
 				CLICK TO VIEW VM STATISTICS</button>
 		</form>
+			<form id="vmThresholdId" name="vmThreshold"
+			action="/VirtualPrivateCloud/vmThresholdPage" method="GET">
+			<button type="submit" class="btn btn-primary btn-lg btn-block">
+				SET VM THRESHOLD VALUES</button>
+		</form>
 		<br> <br>
 		<%-- <form action="/VirtualPrivateCloud/logout" method="GET">
 			<button type="submit" class="btn btn-primary btn-lg btn-block">
