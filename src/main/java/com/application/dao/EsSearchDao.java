@@ -17,6 +17,8 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
+import com.application.utility.MailUtility;
+
 public class EsSearchDao {
 	private static Client client;
 	//String lastSearchTimeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
@@ -70,10 +72,15 @@ public class EsSearchDao {
 						//System.out.println(property + " threshold value - " + threshold + " | log value - " + logValue);
 						
 						if(logValue < threshold) {
-							if(VmStatisticsDao.isVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property)))
+							if(VmStatisticsDao.isVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property))) {
 								VmStatisticsDao.setVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property), false);
+								MailUtility.sendMail(vm, property, UserDao.getUserEmailFromVmName(vm),false);
+							}
 						} else {
-							VmStatisticsDao.setVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property), true);
+							if(!VmStatisticsDao.isVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property))) {
+								VmStatisticsDao.setVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property), true);
+								MailUtility.sendMail(vm, property, UserDao.getUserEmailFromVmName(vm),true);
+							}
 						}
 						
 					} else {

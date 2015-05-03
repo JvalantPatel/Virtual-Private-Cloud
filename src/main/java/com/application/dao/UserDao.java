@@ -172,4 +172,37 @@ public class UserDao {
 		}
 		return valid;
 	}
+	
+	public static String getUserEmailFromVmName(String vmName) {
+		String emailId = "";
+		try {
+			Connection connection = DBConnection.getInstance().connection; 
+			if(vmName != null) {
+				PreparedStatement statement = connection.
+						prepareStatement(
+								"SELECT "
+								+ "user_name "
+								+ "FROM "
+								+ "t_user_vm user_vm "
+								+ ", t_user user "
+								+ "WHERE "
+								+ "user_vm.user_id = user.user_id "
+								+ "AND vm_name = ?"
+								);
+				
+				statement.setString(1, vmName);
+				statement.executeQuery();
+				
+				ResultSet rs = statement.executeQuery();
+				
+				if(rs.first()) {
+					emailId = rs.getString("user_name");
+				}
+			} else
+				System.out.println("VmName is null");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return emailId;
+	}
 }
