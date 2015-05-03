@@ -11,10 +11,10 @@ public class MailUtility {
 	final static String username = "vpc.cloudworks";
 	final static String password = "cmpe28312!@qwQW";
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		sendMail("VM-Logstash-Test", "CPU", "jainik_vora@live.in", true);
 		sendMail("VM-Logstash-Test", "CPU", "jainik_vora@live.in", false);
-	}
+	}*/
 	
 	public static void sendMail(String vmName, String property, String emailId, boolean usageHigh) {
 		Properties props = new Properties();

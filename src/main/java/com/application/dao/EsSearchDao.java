@@ -1,9 +1,7 @@
 package com.application.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,8 +19,7 @@ import com.application.utility.MailUtility;
 
 public class EsSearchDao {
 	private static Client client;
-	//String lastSearchTimeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
-	private static String lastSearchTimeStamp = "2015-04-26T02:58:00Z";
+	private static String lastSearchTimeStamp = getCurrentSystemTimestampOfVM();
 	private static Client getClient() {
 		client = new TransportClient()
         .addTransportAddress(new InetSocketTransportAddress("54.183.240.185", 9300));
@@ -60,16 +57,20 @@ public class EsSearchDao {
 			
 			Map<String, Long> vmPropertySet = VmStatisticsDao.getVMPropertyThresholdValues(vm);
 			List<Map<String,Object>> searchResult = searchLogs(vm);
-			
+			/*for(Map<String,Object> resultEntry : searchResult) {
+				for(Entry<String,Object> entry : resultEntry.entrySet()) {
+					System.out.println(entry.getKey() + " => " + entry.getValue().toString());
+				}
+			}*/
+			//System.out.println("Total Size: " + searchResult.size());
 			for(Map<String,Object> resultEntry : searchResult) {
 				
 				for(String property: vmStatProperties.keySet()) {
-					
 					if(vmPropertySet.containsKey(property)) {
 						
 						long threshold = vmPropertySet.get(property);
 						long logValue = ((Integer)resultEntry.get(property.toLowerCase())).longValue();
-						//System.out.println(property + " threshold value - " + threshold + " | log value - " + logValue);
+						System.out.println(vm + " >> "+  property + " threshold value - " + threshold + " | log value - " + logValue + " -- at time: " + resultEntry.get("timestamp"));
 						
 						if(logValue < threshold) {
 							if(VmStatisticsDao.isVmPropertyLimitExceeded(vmList.get(vm), vmStatProperties.get(property))) {
@@ -89,6 +90,15 @@ public class EsSearchDao {
 				}
 			}
 		}
-		lastSearchTimeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
+		lastSearchTimeStamp = getCurrentSystemTimestampOfVM();
+	}
+	
+	private static String getCurrentSystemTimestampOfVM() {
+		final long HOUR = 3600*1000;
+		String currentTimestamp = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date(new Date().getTime() + 7 * HOUR));
+		//new Date(new Date().getTime() + 7 * HOUR);
+		return currentTimestamp;
+		
+		
 	}
 }
